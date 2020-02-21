@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.celiocausjr.domain.Categoria;
+import com.celiocausjr.dto.CategoriaDTO;
 import com.celiocausjr.repositories.CategoriaRepository;
 import com.celiocausjr.servicies.exceptions.ConstraintException;
 import com.celiocausjr.servicies.exceptions.ObjectNotFoundException;
@@ -54,5 +55,9 @@ public class CategoriaService {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repo.findAll(pageRequest);
 
+	}
+
+	public Categoria fromDto(CategoriaDTO objDto) {
+		return new Categoria(objDto.getId(), objDto.getName());
 	}
 }
