@@ -55,7 +55,7 @@ public class ClienteService {
 		try {
 			repo.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
-			throw new ConstraintException("Não é possível Cliente realacionados a outras entidades");
+			throw new ConstraintException("Não é possível excluir este cliente porque há pedidos relacionados a ele");
 		}
 	}
 
