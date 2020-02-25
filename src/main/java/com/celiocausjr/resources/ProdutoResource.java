@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.celiocausjr.domain.Produto;
-import com.celiocausjr.dto.CategoriaDTO;
 import com.celiocausjr.dto.ProdutoDTO;
 import com.celiocausjr.resources.utils.URL;
 import com.celiocausjr.servicies.ProdutoService;
