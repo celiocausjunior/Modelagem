@@ -20,6 +20,7 @@ import com.celiocausjr.domain.PagamentoComCartao;
 import com.celiocausjr.domain.Pedido;
 import com.celiocausjr.domain.Produto;
 import com.celiocausjr.domain.enums.EstadoPagamento;
+import com.celiocausjr.domain.enums.Perfil;
 import com.celiocausjr.domain.enums.TipoCliente;
 import com.celiocausjr.repositories.CategoriaRepository;
 import com.celiocausjr.repositories.CidadeRepository;
@@ -122,14 +123,21 @@ public class DBService {
 
 		Cliente cli1 = new Cliente(null, "Maria Silva", "ccaus2@hotmail.com", "426526896-98", TipoCliente.PESSOAFISICA, pe.encode("123") );
 		cli1.getTelefones().addAll(Arrays.asList("4562-5689", "999865686"));
+		
+		Cliente cli2 = new Cliente(null, "Ana Costa", "ccaus@uol.com.br", "866243230-19", TipoCliente.PESSOAFISICA, pe.encode("123") );
+		cli2.addPerfil(Perfil.ADMIN);
+		cli2.getTelefones().addAll(Arrays.asList("4544-5689", "99565686"));
 
 		Endereco e1 = new Endereco(null, "Rua Flores", "300", "Apto 303", "Jardim", "15080-180", cli1, c1);
 		Endereco e2 = new Endereco(null, "Avenida Matos", "105", "Sala 800", "Centro", "3877012", cli1, c2);
+		Endereco e3 = new Endereco(null, "Avenida Cardoso", "1515", null, "Centro", "3884512", cli2, c2);
+		
 
 		cli1.getEnderecos().addAll(Arrays.asList(e1, e2));
+		cli2.getEnderecos().addAll(Arrays.asList(e3));
 
-		clienteRepository.saveAll(Arrays.asList(cli1));
-		enderecoRepository.saveAll(Arrays.asList(e1, e2));
+		clienteRepository.saveAll(Arrays.asList(cli1, cli2));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
