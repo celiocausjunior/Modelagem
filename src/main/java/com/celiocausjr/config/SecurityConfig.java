@@ -15,6 +15,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.celiocausjr.security.JWTAuthenticationFilter;
+import com.celiocausjr.security.JWTUtil;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -31,6 +34,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			"/produtos/**", "/categorias/**", "/clientes/**"
 
 	};
+	
+	@Autowired
+	private JWTUtil jwtUtil;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -39,6 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(PUBLIC_MATCHERS).permitAll().anyRequest().authenticated();
 
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
 	}
 
 	@Bean
