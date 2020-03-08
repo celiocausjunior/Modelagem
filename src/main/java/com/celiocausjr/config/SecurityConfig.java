@@ -16,6 +16,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.celiocausjr.security.JWTAuthenticationFilter;
+import com.celiocausjr.security.JWTAuthorizationFilter;
 import com.celiocausjr.security.JWTUtil;
 
 @Configuration
@@ -28,13 +29,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private UserDetailsService userDetailsService;
-	
+
 	private static final String[] PUBLIC_MATCHERS_GET = {
 
 			"/produtos/**", "/categorias/**", "/clientes/**"
 
 	};
-	
+
 	@Autowired
 	private JWTUtil jwtUtil;
 
@@ -46,6 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
+		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
+
 	}
 
 	@Bean
@@ -60,11 +63,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 
 	}
-	
+
 	@Override
-	public void configure (AuthenticationManagerBuilder auth) throws Exception{
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
-	
-	
+
 }
