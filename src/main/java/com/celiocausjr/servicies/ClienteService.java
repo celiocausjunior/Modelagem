@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.celiocausjr.domain.Cidade;
 import com.celiocausjr.domain.Cliente;
 import com.celiocausjr.domain.Endereco;
+import com.celiocausjr.domain.enums.Perfil;
 import com.celiocausjr.domain.enums.TipoCliente;
 import com.celiocausjr.dto.ClienteDTO;
 import com.celiocausjr.dto.ClienteNewDTO;
 import com.celiocausjr.repositories.ClienteRepository;
 import com.celiocausjr.repositories.EnderecoRepository;
+import com.celiocausjr.security.UserSS;
+import com.celiocausjr.servicies.exceptions.AuthorizationException;
 import com.celiocausjr.servicies.exceptions.ConstraintException;
 import com.celiocausjr.servicies.exceptions.ObjectNotFoundException;
 
@@ -33,6 +36,13 @@ public class ClienteService {
 	private EnderecoRepository enderecoRepository;
 
 	public Cliente find(Integer id) {
+		
+		UserSS user = UserService.authenticated();
+		if (user == null || !user.hasRole(Perfil.ADMIN) && !id.equals(user.getId()) ) {
+			throw new AuthorizationException("Acesso negado");
+		}
+		
+		
 		Optional<Cliente> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
